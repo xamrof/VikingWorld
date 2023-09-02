@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import { UserModel } from "../models/user.model"
 
 
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
 
     }
 
-    public async createUser(): Promise<any>{
+    public async createUser(userModel: UserModel): Promise<any>{
         
     }
 
