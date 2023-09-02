@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import express, { Request, Response } from "express";
 import cors from 'cors'
+import users from './routes/user.routes'
 
 
 (() => {
@@ -10,9 +11,7 @@ import cors from 'cors'
     app.use(cors())
     app.use(express.json())
 
-    app.use('/', (req: Request, res: Response) => {
-        res.json('app is running')
-    })
+    app.use('/api/users', users)
 
     app.listen(port, () => {
         console.log(`App is running in port ${port}`)
