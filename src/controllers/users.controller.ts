@@ -14,7 +14,12 @@ export class UserController {
     }
 
     public async getUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
-        res.json({msg: 'users'})
+        try {
+            const users = await UserService.instance.getAllUsers()
+            res.status(200).json(users)
+        } catch (error) {
+            next(error)
+        }
     }
 
     public async getUser(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -32,7 +37,7 @@ export class UserController {
                 user
             })    
         } catch (error) {
-            throw error        
+            next(error)   
         }
 
     }

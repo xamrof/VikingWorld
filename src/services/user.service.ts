@@ -2,6 +2,8 @@ import { Request, Response } from "express"
 import { UserModel } from "../models/user.model"
 import { encodePassword } from "../helpers/encoderPass"
 import { PrismaClient } from "@prisma/client"
+import { CustomError } from "../models/customError"
+import { HttpStatusCode } from "../helpers/httpStatusCode"
 
 
 export class UserService {
@@ -15,8 +17,23 @@ export class UserService {
         return this._instance || (this._instance = new this())
     }
 
-    public async getAllUsers(): Promise<any>{
+    public async getAllUsers(): Promise<UserModel[]>{
 
+        try {
+            const users = await this.prisma.user.findMany()
+
+            if (!users){
+                throw new CustomError("i can't find any user in database", HttpStatusCode.BAD_REQUEST)
+            }
+
+            this.prisma.$disconnect()
+            return users     
+        } catch (error) {
+            await this.prisma.$disconnect()
+            throw error
+        }
+
+       
     }
 
     public async getUser(): Promise<any>{
