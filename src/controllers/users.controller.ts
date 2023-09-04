@@ -23,7 +23,15 @@ export class UserController {
     }
 
     public async getUser(req: Request, res: Response, next: NextFunction): Promise<void> {
-        res.json({msg: 'user'})
+        const {id} = req.params
+
+        try {
+            const user = await UserService.instance.getUser(+id)
+            res.status(200).json(user)
+        } catch (error) {
+            next(error)
+        }
+
     }
 
     public async create(req: Request, res: Response, next: NextFunction): Promise<void> {

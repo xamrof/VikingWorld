@@ -36,8 +36,18 @@ export class UserService {
        
     }
 
-    public async getUser(): Promise<any>{
-
+    public async getUser(id: number): Promise<UserModel>{
+        try {
+            const user = await this.prisma.user.findUnique({where: {id}})
+            if(!user){
+                throw new CustomError(`The user with the id ${id} not exist`, HttpStatusCode.BAD_REQUEST)
+            }
+            this.prisma.$disconnect()
+            return user
+        } catch (error) {
+            await this.prisma.$disconnect()
+            throw error 
+        }
     }
 
     public async createUser(userModel: UserModel): Promise<any>{
